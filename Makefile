@@ -1,5 +1,5 @@
 ORG_NAME := um
-PROJECT_NAME ?= docker-epacts-3.4.2
+PROJECT_NAME ?= docker-epacts
 
 USER ?= `whoami`
 USERID := `id -u`
@@ -18,9 +18,8 @@ EPACTS_DIR := /opt/epacts
 all: docker test
 
 test: docker
-#	epacts help returns an error.
-#	See https://github.com/statgen/EPACTS/pull/40
-#	@docker run -t $(IMAGE) help
+#	@docker run -t $(IMAGE) epacts help
+#	@docker run -t $(IMAGE) R --version > /dev/null
 
 tests: test
 

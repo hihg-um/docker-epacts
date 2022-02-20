@@ -16,7 +16,7 @@
 # After things are working correctly it is best-practice to
 # chain commands together using && to factor out layers.
 
-FROM ubuntu:22.04 as base
+FROM ubuntu:20.04 as base
 
 # user data provided by the host system via the make file
 # without these, the container will fail-safe and be unable to write output
@@ -84,12 +84,11 @@ WORKDIR ${SRC_DIR}
 
 # Package notes:
 # epacts is from https://github.com/statgen/EPACTS
-ARG EPACTS_URL="github.com/statgen/EPACTS/archive/refs/tags/"
-ARG EPACTS_VER="3.4.2"
-
-RUN wget https://${EPACTS_URL}/v${EPACTS_VER}.tar.gz && \
-	tar xzf v${EPACTS_VER}.tar.gz && rm v${EPACTS_VER}.tar.gz && \
-	cd EPACTS-${EPACTS_VER} && \
+ARG EPACTS_URL="github.com/hihg-um/EPACTS/archive/refs/heads"
+ARG EPACTS_VER="ubuntu-20.04"
+RUN wget https://${EPACTS_URL}/${EPACTS_VER}.tar.gz && \
+	tar xzf ${EPACTS_VER}.tar.gz && rm ${EPACTS_VER}.tar.gz && \
+	ls && cd EPACTS-${EPACTS_VER} && \
 	cget install -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" \
 		-f requirements.txt && mkdir -p build && cd build && \
 	cmake -DCMAKE_INSTALL_PREFIX=${EPACTS_DIR} \
@@ -108,7 +107,7 @@ COPY --chown=$USERNAME:$USERGID --from=builder $EPACTS_DIR/ $EPACTS_DIR/
 RUN chown -R $USERNAME:$USERGID /runtime
 RUN epacts download
 
+# we map the user owning the image so permissions for input/output will work
 USER $USERNAME
 
-# we map the user owning the image so permissions for input/output will work
 ENTRYPOINT [ "epacts" ]
