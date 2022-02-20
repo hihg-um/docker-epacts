@@ -1,21 +1,3 @@
-# This is a typical three-stage docker build.
-#
-# Stage 1 is known as the base image. This contains packages and
-# configuration common to both the builder and release images.
-#
-# Stage 2 is known as the builder image, which uses the base image
-# as starting point.  The builder adds packages and tools required
-# to build (configure, compile, link, install) release software.
-#
-# Stage 3 is the release container. This is the only image that is
-# retained, and tagged with a name. The release stage also uses
-# the base image as starting point, eliminating duplication,
-# speeding things up, and maintianing consistency.
-
-# Each RUN command adds another layer to the container.
-# After things are working correctly it is best-practice to
-# chain commands together using && to factor out layers.
-
 FROM ubuntu:20.04 as base
 
 # user data provided by the host system via the make file

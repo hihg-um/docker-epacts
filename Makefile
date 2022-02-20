@@ -1,11 +1,10 @@
 ORG_NAME := um
 PROJECT_NAME ?= docker-epacts
 
-USER ?= `whoami`
 GID ?= users
 
 IMAGE_REPOSITORY :=
-IMAGE := $(USER)/$(ORG_NAME)/$(PROJECT_NAME):latest
+IMAGE := $(ORG_NAME)/$(PROJECT_NAME):latest
 
 # Use this for debugging builds. Turn off for a more slick build log
 DOCKER_BUILD_ARGS := --progress=plain
