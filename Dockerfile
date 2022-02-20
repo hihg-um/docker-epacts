@@ -2,12 +2,10 @@ FROM ubuntu:20.04 as base
 
 # user data provided by the host system via the make file
 # without these, the container will fail-safe and be unable to write output
-ARG GROUP
 ARG EPACTS_DIR
 
 # Put the user name and ID into the ENV, so the runtime inherits them
-ENV GROUP=${GROUP:-nogroup} \
-	EPACTS_DIR=${EPACTS_DIR}
+ENV EPACTS_DIR=${EPACTS_DIR}
 
 # Install OS updates, security fixes and utils, generic app dependencies
 # htslib is libhts3 in Ubuntu see https://github.com/samtools/htslib/
@@ -79,7 +77,6 @@ WORKDIR /runtime
 # copy the applications from the builder image
 COPY --from=builder $EPACTS_DIR/ $EPACTS_DIR/
 
-RUN chgrp -R $GROUP /runtime
 RUN epacts download
 
 ENTRYPOINT [ "epacts" ]

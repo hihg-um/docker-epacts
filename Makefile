@@ -1,8 +1,6 @@
 ORG_NAME := um
 PROJECT_NAME ?= docker-epacts
 
-GID ?= users
-
 IMAGE_REPOSITORY :=
 IMAGE := $(ORG_NAME)/$(PROJECT_NAME):latest
 
@@ -26,7 +24,6 @@ clean:
 
 docker:
 	@docker build -t $(IMAGE) \
-		--build-arg GROUP=$(GID) \
 		--build-arg EPACTS_DIR="$(EPACTS_DIR)" \
 		$(DOCKER_BUILD_ARGS) \
 	  .
