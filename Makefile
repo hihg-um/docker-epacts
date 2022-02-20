@@ -2,8 +2,7 @@ ORG_NAME := um
 PROJECT_NAME ?= docker-epacts
 
 USER ?= `whoami`
-USERID := `id -u`
-USERGID ?= users
+GID ?= users
 
 IMAGE_REPOSITORY :=
 IMAGE := $(USER)/$(ORG_NAME)/$(PROJECT_NAME):latest
@@ -28,9 +27,7 @@ clean:
 
 docker:
 	@docker build -t $(IMAGE) \
-		--build-arg USERNAME=$(USER) \
-		--build-arg USERID=$(USERID) \
-		--build-arg USERGID=$(USERGID) \
+		--build-arg GROUP=$(GID) \
 		--build-arg EPACTS_DIR="$(EPACTS_DIR)" \
 		$(DOCKER_BUILD_ARGS) \
 	  .

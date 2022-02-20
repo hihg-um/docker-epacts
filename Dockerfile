@@ -20,20 +20,12 @@ FROM ubuntu:20.04 as base
 
 # user data provided by the host system via the make file
 # without these, the container will fail-safe and be unable to write output
-ARG USERNAME
-ARG USERID
-ARG USERGID
+ARG GROUP
 ARG EPACTS_DIR
 
 # Put the user name and ID into the ENV, so the runtime inherits them
-ENV USERNAME=${USERNAME:-nouser} \
-	USERID=${USERID:-65533} \
-	USERGID=${USERGID:-nogroup} \
+ENV GROUP=${GROUP:-nogroup} \
 	EPACTS_DIR=${EPACTS_DIR}
-
-# match the building user. This will allow output only where the building
-# user has write permissions
-RUN useradd -m -u $USERID -g $USERGID $USERNAME
 
 # Install OS updates, security fixes and utils, generic app dependencies
 # htslib is libhts3 in Ubuntu see https://github.com/samtools/htslib/
@@ -101,13 +93,11 @@ FROM base AS release
 ENV PATH=${PATH}:${EPACTS_DIR}/bin
 
 WORKDIR /runtime
+
 # copy the applications from the builder image
-COPY --chown=$USERNAME:$USERGID --from=builder $EPACTS_DIR/ $EPACTS_DIR/
+COPY --from=builder $EPACTS_DIR/ $EPACTS_DIR/
 
-RUN chown -R $USERNAME:$USERGID /runtime
+RUN chgrp -R $GROUP /runtime
 RUN epacts download
-
-# we map the user owning the image so permissions for input/output will work
-USER $USERNAME
 
 ENTRYPOINT [ "epacts" ]
