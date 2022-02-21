@@ -1,4 +1,4 @@
-ORG_NAME := um
+ORG_NAME := hihg-um
 PROJECT_NAME ?= docker-epacts-3.4.2
 
 IMAGE_REPOSITORY :=
