@@ -57,7 +57,7 @@ WORKDIR ${SRC_DIR}
 # Package notes:
 # epacts is from https://github.com/statgen/EPACTS
 ARG EPACTS_URL="github.com/hihg-um/EPACTS/archive/refs/heads"
-ARG EPACTS_VER="ubuntu-20.04"
+ARG EPACTS_VER="octopus"
 RUN wget https://${EPACTS_URL}/${EPACTS_VER}.tar.gz && \
 	tar xzf ${EPACTS_VER}.tar.gz && rm ${EPACTS_VER}.tar.gz && \
 	ls && cd EPACTS-${EPACTS_VER} && \
