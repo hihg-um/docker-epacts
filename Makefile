@@ -1,8 +1,11 @@
 ORG_NAME := hihg-um
 PROJECT_NAME ?= docker-epacts-3.4.2
 
+USER ?= `whoami`
+GID ?= users
+
 IMAGE_REPOSITORY :=
-IMAGE := $(ORG_NAME)/$(PROJECT_NAME):latest
+IMAGE := $(USER)/$(ORG_NAME)/$(PROJECT_NAME):latest
 
 # Use this for debugging builds. Turn off for a more slick build log
 DOCKER_BUILD_ARGS := --progress=plain
@@ -25,6 +28,7 @@ clean:
 
 docker:
 	@docker build -t $(IMAGE) \
+		--build-arg GROUP=$(GID) \
 		--build-arg EPACTS_DIR="$(EPACTS_DIR)" \
 		$(DOCKER_BUILD_ARGS) \
 	  .
