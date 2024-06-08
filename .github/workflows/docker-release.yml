@@ -1,0 +1,36 @@
+name: Docker Release CI
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+jobs:
+
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 'Checkout Actions'
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 5
+        fetch-tags: true
+
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+
+    - name: 'Build the Docker image'
+      run: IMAGE_REPO="ghcr.io" make docker
+
+    - name: 'Test the Docker image'
+      run: IMAGE_REPO="ghcr.io" make docker_test
+
+    - name: 'Release the Docker image'
+      run: IMAGE_REPO="ghcr.io" make docker_release
